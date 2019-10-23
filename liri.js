@@ -93,6 +93,43 @@ function runLiri(requestType, searchItem) {
                 console.log(output);
             });
             break;
+
+        case "concert-this":
+            if (searchItem === undefined) {
+                searchItem = "Starset";
+            }
+
+            var queryURL = "https://rest.bandsintown.com/artists/" + searchItem + "/events?app_id=codingbootcamp";
+            axios.get(queryURL).then(function (response) {
+                if (response.data[0] != undefined) {
+                    output = "  ------------  \nArtist: " + response.data[0].lineup[0] +
+                        "\nVenue Name: " + response.data[0].venue.name +
+                        "\nVenue Location: " + response.data[0].venue.city + ", " + response.data[0].venue.country +
+                        "\nVenue Date: " + moment(response.data[0].datetime).format("MM/DD/YYYY") +
+                        "\n  ------------  \n";
+
+                    outputToFile(output);
+                    console.log(output);
+                } else {
+                    output = ("  ------------  \nYour band is not touring right now.\n  ------------  \n");
+                    outputToFile(output);
+                    console.log(output);
+                }
+            });
+            break;
+
+
+        case "do-what-it-says":
+            fs.readFile("random.txt", "utf8", function (error, data) {
+                if (error) {
+                    console.log("Error reading the file.")
+                    return false;
+                }
+                var textInputArray = data.split(',"');
+                textInputArray[1] = textInputArray[1].substring(0, textInputArray[1].length - 1);
+                runLiri(textInputArray[0], textInputArray[1]);
+            });
+            break;
     }
 }
 
