@@ -15,7 +15,7 @@ function runLiri(requestType, searchItem) {
     outputToFile(">> node liri.js " + requestType + ' "' + searchItem + '"\n');
     switch (requestType) {
         case "spotify-this-song":
-         
+
             if (searchItem === undefined) {
                 searchItem = "Inside Out";
             }
@@ -51,8 +51,48 @@ function runLiri(requestType, searchItem) {
                 });
             break;
 
- 
-        
+        case "movie-this":
+
+            if (searchItem === undefined) {
+                searchItem = "Alien";
+            }
+
+            var queryURL = "https://www.omdbapi.com/?apikey=" + keys.omdb_key + "&t=" + searchItem;
+
+            axios.get(queryURL).then(function (response) {
+                if (response.data.Error) {
+                    output = "  ------------  \n" + response.data.Error + "\n  ------------  \n";
+                    console.log(output)
+                    outputToFile(output);
+                    return false;
+                }
+                var tomRating = "";
+                if (response.data.Ratings[0]) {
+                    response.data.Ratings.forEach(element => {
+                        if (element.Source === "Rotten Tomatoes") {
+                            tomRating = "\nRotten Tomatoes Rating: " + element.Value;
+                        } else if (tomRating === "") {
+                            tomRating = "\nRotten Tomatoes rating doesn't exist!";
+                        }
+                    });
+                } else {
+                    tomRating = "\nRotten Tomatoes rating doesn't exist!";
+                }
+
+                output = "  ------------  \nMovie Title: " + response.data.Title +
+                    "\nYear Released: " + moment(response.data.Released, "DD MMM YYYY").format("YYYY") +
+                    "\nRating: " + response.data.Rated.toUpperCase() +
+                    "\nIMDB Rating: " + response.data.imdbRating + tomRating +
+                    "\nCountry Produced: " + response.data.Country +
+                    "\nLanguage: " + response.data.Language +
+                    "\nPlot: " + response.data.Plot +
+                    "\nActors: " + response.data.Actors +
+                    "\n  ------------  \n";
+
+                outputToFile(output);
+                console.log(output);
+            });
+            break;
     }
 }
 
