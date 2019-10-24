@@ -15,7 +15,7 @@ function runLiri(requestType, searchItem) {
     outputToFile(">> node liri.js " + requestType + ' "' + searchItem + '"\n');
     switch (requestType) {
         case "spotify-this-song":
-
+         
             if (searchItem === undefined) {
                 searchItem = "Inside Out";
             }
@@ -32,7 +32,7 @@ function runLiri(requestType, searchItem) {
                     for (var i = 0; i < data.tracks.items.length; i++) {
                         if (data.tracks.items[i].name.toLowerCase() === searchItem.toLowerCase()) {
                             if (data.tracks.items[i].preview_url != null) {
-                                var previewURL = "\nListen to a bit of the song: " +
+                                var previewURL = "\nListen to a preview of the song: " +
                                     data.tracks.items[i].preview_url;
                             } else {
                                 previewURL = "\nNo song preview is available.";
@@ -45,14 +45,14 @@ function runLiri(requestType, searchItem) {
                             return false;
                         }
                     }
-                    output = "  ------------  \nThere was no exact match to that song name.\n  ------------  \n";
+                    output = "  ------------  \nSorry, I couldn't find that song.\n  ------------  \n";
                     outputToFile(output);
                     console.log(output);
                 });
             break;
-
+            
         case "movie-this":
-
+         
             if (searchItem === undefined) {
                 searchItem = "Alien";
             }
@@ -72,11 +72,11 @@ function runLiri(requestType, searchItem) {
                         if (element.Source === "Rotten Tomatoes") {
                             tomRating = "\nRotten Tomatoes Rating: " + element.Value;
                         } else if (tomRating === "") {
-                            tomRating = "\nRotten Tomatoes rating doesn't exist!";
+                            tomRating = "\nRotten Tomatoes doesn't have a rating yet!";
                         }
                     });
                 } else {
-                    tomRating = "\nRotten Tomatoes rating doesn't exist!";
+                    tomRating = "\nRotten Tomatoes doesn't have a rating yet!";
                 }
 
                 output = "  ------------  \nMovie Title: " + response.data.Title +
@@ -118,11 +118,10 @@ function runLiri(requestType, searchItem) {
             });
             break;
 
-
         case "do-what-it-says":
             fs.readFile("random.txt", "utf8", function (error, data) {
                 if (error) {
-                    console.log("Error reading the file.")
+                    console.log("Error reading random.txt.")
                     return false;
                 }
                 var textInputArray = data.split(',"');
@@ -132,7 +131,12 @@ function runLiri(requestType, searchItem) {
             break;
     }
 }
-
-
+function outputToFile(str) {
+    fs.appendFile("log.txt", str, function (error) {
+        if (error) {
+            console.log("There was an error writing to log.txt")
+        }
+    });
+}
 
 runLiri(requestType, searchItem);

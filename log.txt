@@ -1,0 +1,14 @@
+>> node liri.js concert-this "undefined"
+  ------------  
+Artist: Starset
+Venue Name: Tla
+Venue Location: Philadelphia, United States
+Venue Date: 10/24/2019
+  ------------  
+>> node liri.js spotify-this-song "Inside Out"
+  ------------  
+Song Name: Inside Out
+Artist: Eve 6
+Album: Eve 6
+Listen to a bit of the song: https://p.scdn.co/mp3-preview/a09fb8015745b9340e1d614847352a7287d84ba3?cid=1a5a87033bec4823b945ae650dfbd0ce
+  ------------  
